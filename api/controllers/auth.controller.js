@@ -30,14 +30,28 @@ import prisma from "../lib/prisma.js";
 };
 
  const login = async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password ,email } = req.body;
 
+
+    
     try {
         // CHECK IF THE USER EXISTS
 
-        const user = await prisma.user.findUnique({
-            where: { username },
-        });
+        if ((!email || !username) && !password)  {
+            return res.status(400).json({ message: "Please provide email or username!" });
+        }
+
+        let user;
+
+        if (email) {
+            user = await prisma.user.findUnique({
+                where: { email },
+            })
+        } else {
+
+                 user = await prisma.user.findUnique({
+                    where: { username },
+                }) }
 
         if (!user) return res.status(400).json({ message: "Invalid Credentials!" });
 
@@ -51,7 +65,7 @@ import prisma from "../lib/prisma.js";
         // GENERATE COOKIE TOKEN AND SEND TO THE USER
 
         // res.setHeader("Set-Cookie", "test=" + "myValue").json("success")
-        const age = "7d";
+       const age = 2 * 24 * 60 * 60
 
         const token = jwt.sign(
             {
@@ -59,7 +73,7 @@ import prisma from "../lib/prisma.js";
                 isAdmin: false,
             },
             process.env.JWT_SECRET_KEY,
-            { expiresIn: age }
+            { expiresIn: age } 
         );
 
         const { password: userPassword, ...userInfo } = user;
@@ -68,7 +82,7 @@ import prisma from "../lib/prisma.js";
             .cookie("token", token, {
                 httpOnly: true,
                 // secure:true,
-                maxAge: age,
+                maxAge: age * 1000, // Convert to milliseconds
             })
             .status(200)
             .json(userInfo);

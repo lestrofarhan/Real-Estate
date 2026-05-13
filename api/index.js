@@ -19,9 +19,9 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 // app.use("/api/users", userRoute);
-// app.use("/api/posts", postRoute);
+app.use("/api/posts", postRoute);
 // app.use("/api/test", testRoute);
-// app.use("/api/chats", chatRoute);
+app.use("/api/chats", chatRoute);
 // app.use("/api/messages", messageRoute);
 
 app.get("/test", (req, res) => {
