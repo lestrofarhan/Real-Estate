@@ -1,26 +1,33 @@
-import React from 'react'
+import React, {useContext, useState } from 'react'
 import './navbar.scss'
+import { Link } from 'react-router-dom';
 
+import { AuthContext } from "../../context/AuthContext";
+import { useNotificationStore } from "../../lib/notificationStore";
 
 const Navbar = () => {
 
-    const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
-    let currentUser;
+  const { currentUser } = useContext(AuthContext);
 
+  const fetch = useNotificationStore((state) => state.fetch);
+  const number = useNotificationStore((state) => state.number);
   return (
     <nav>
       <div className="left">
-        <a href="/" className="logo">
+        <Link href="/" className="logo">
           <img src="/logo.png" alt="" />
           <span>LamaEstate</span>
-        </a>
-        <a href="/">Home</a>
-        <a href="/">About</a>
-        <a href="/">Contact</a>
-        <a href="/">Agents</a>
+        </Link>
+        <Link href="/">Home</Link>
+        <Link href="/">About</Link>
+        <Link href="/">Contact</Link>
+        <Link href="/">Agents</Link>
       </div>
-      <div className="right">
+      <div onClick={() => {
+        console.log("cliekddfsjaf")
+      }} className="right">
         {currentUser ? (
           <div className="user">
             <img src={currentUser?.avatar || "/noavatar.jpg"} alt="" />
@@ -32,10 +39,14 @@ const Navbar = () => {
           </div>
         ) : (
           <>
-            <a href="/login">Sign in</a>
-            <a href="/register" className="register">
+            <Link onClick={()=>{
+              console.log("btn is clicked")
+            }} to="/login">Sign in</Link>
+            <Link onClick={()=>{
+              console.log("btn is clicked")
+            }} to="/register" className="register">
               Sign up
-            </a>
+            </Link>
           </>
         )}
         <div className="menuIcon">
@@ -46,12 +57,12 @@ const Navbar = () => {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-          <a href="/">Home</a>
-          <a href="/">About</a>
-          <a href="/">Contact</a>
-          <a href="/">Agents</a>
-          <a href="/">Sign in</a>
-          <a href="/">Sign up</a>
+          <Link href="/">Home</Link>
+          <Link href="/">About</Link>
+          <Link href="/">Contact</Link>
+          <Link href="/">Agents</Link>
+          <Link to="/login">Sign in</Link>
+          <Link to="/register">Sign up</Link>
         </div>
       </div>
     </nav>

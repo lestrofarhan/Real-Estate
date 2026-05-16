@@ -5,10 +5,12 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 100;
 
   a {
     transition: all 0.4s ease;
-
+    cursor: pointer;
+    z-index: 100;
     @include responsive.sm {
       display: none;
     }
@@ -17,6 +19,8 @@ nav {
       scale: 1.05;
     }
   }
+
+  
 
   .left {
     flex: 3;
@@ -62,6 +66,7 @@ nav {
       padding: 12px 24px;
       margin: 20px;
     }
+    
 
     .user{
       display: flex;
@@ -139,9 +144,11 @@ nav {
       align-items: center;
       justify-content: center;
       font-size: 24px;
+      pointer-events: none;
 
       &.active {
         right: 0;
+        pointer-events: auto;
       }
 
       @include responsive.sm {
@@ -152,3 +159,5 @@ nav {
     }
   }
 }
+
+

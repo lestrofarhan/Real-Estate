@@ -2,6 +2,8 @@ import "./layout.scss";
 import Navbar from "../../components/navbar/Navbar";
 import { Navigate, Outlet } from "react-router-dom";
 import HomePage from "../homepage/HomePage";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
 
 function Layout() {
   return (
@@ -10,8 +12,8 @@ function Layout() {
         <Navbar />
       </div>
       <div className="content">
-        {/* <Outlet /> */}
-        <HomePage />
+        <Outlet />
+       
       </div>
     </div>
   );

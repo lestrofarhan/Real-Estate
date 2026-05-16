@@ -144,7 +144,7 @@ export const savePost = async (req,res)=>{
         } else {
             await prisma.savedPost.create({
                 data: {
-                    userId: tokenUserId,
+                    userId: tokenuserId,
                     postId,
                 },
             });
@@ -168,7 +168,7 @@ export const profilePosts = async (req, res) => {
         });
 
         const saved = await prisma.savedPost.findMany({
-            where: { userId: tokenUserId },
+            where: { userId: tokenuserId },
             include: {
                 post: true,
             },

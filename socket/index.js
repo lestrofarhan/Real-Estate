@@ -1,4 +1,4 @@
-import { server } from "socket.io";
+import { Server } from "socket.io";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -47,6 +47,4 @@ io.on("connection", (socket) => {
 
 
 
-io.listen(process.env.SOCKET_PORT, () => {
-    console.log("Socket server is running!");
-});
+io.listen(process.env.SOCKET_PORT);
