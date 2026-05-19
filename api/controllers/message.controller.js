@@ -1,3 +1,5 @@
+import prisma from "../lib/prisma.js"
+
 export const addMessage = async (req, res) => { 
     const tokenuserId = req.userID;
     const chatId = req.params.chatId;
@@ -20,6 +22,7 @@ export const addMessage = async (req, res) => {
             },
         });
 
+        
         await prisma.chat.update({
             where: { id: chatId },
             data: {

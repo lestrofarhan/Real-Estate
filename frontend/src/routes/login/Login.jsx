@@ -32,7 +32,7 @@ function Login() {
 
       navigate("/");
     } catch (err) {
-      setError(err.message || "Failed to Login");
+      setError(err.response?.data?.message || "Failed to Login");
     } finally {
       setIsLoading(false);
     }

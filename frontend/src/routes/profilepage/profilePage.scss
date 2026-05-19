@@ -4,7 +4,7 @@
   display: flex;
   height: 100%;
 
-  @include md{
+  @include md {
     flex-direction: column;
     overflow: scroll;
   }
@@ -14,27 +14,27 @@
     overflow-y: scroll;
     padding-bottom: 50px;
 
-    @include md{
-      flex:none;
+    @include md {
+      flex: none;
       height: max-content;
     }
 
-    .wrapper{
+    .wrapper {
       padding-right: 50px;
       display: flex;
       flex-direction: column;
       gap: 50px;
 
-      .title{
+      .title {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        h1{
+        h1 {
           font-weight: 300;
         }
 
-        button{
+        button {
           padding: 12px 24px;
           background-color: #fece51;
           cursor: pointer;
@@ -42,18 +42,18 @@
         }
       }
 
-      .info{
+      .info {
         display: flex;
         flex-direction: column;
         gap: 20px;
 
-        span{
+        span {
           display: flex;
           align-items: center;
           gap: 20px;
         }
 
-        button{
+        button {
           width: 100px;
           background-color: teal;
           border: none;
@@ -63,7 +63,7 @@
           border-radius: 5px;
         }
 
-        img{
+        img {
           width: 40px;
           height: 40px;
           border-radius: 50%;
@@ -77,14 +77,115 @@
     background-color: #fcf5f3;
     height: 100%;
 
-    @include md{
-      flex:none;
+    @include md {
+      flex: none;
       height: max-content;
     }
 
-    .wrapper{
+    .wrapper {
       padding: 0px 20px;
       height: 100%;
     }
+  }
+}
+
+/* Skeleton styles for Profile Page */
+.skeleton {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.info-skeleton {
+  align-items: center;
+  gap: 18px;
+  padding: 12px;
+  background: transparent;
+}
+.info-skeleton .avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+.info-skeleton .lines {
+  flex: 1;
+}
+.skeleton .line {
+  height: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+.skeleton .line.short {
+  width: 30%;
+  height: 14px;
+}
+.skeleton .line.long {
+  width: 70%;
+  height: 14px;
+}
+.skeleton .line.medium {
+  width: 50%;
+}
+
+.list-skeleton {
+  flex-direction: column;
+  width: 100%;
+}
+.skeleton-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fff, #fafafa);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(2, 6, 23, 0.04);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+.skeleton-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 36px rgba(2, 6, 23, 0.08);
+}
+.skeleton-card.focused {
+  transform: scale(1.02);
+  box-shadow: 0 18px 48px rgba(2, 6, 23, 0.12);
+}
+.skeleton-card .thumb {
+  width: 120px;
+  height: 80px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+.chat-skeleton {
+  flex-direction: column;
+  padding: 12px;
+}
+.chat-skeleton .chat-line {
+  width: 100%;
+  height: 14px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #eee 25%, #ddd 37%, #eee 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.6s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400% 0;
+  }
+  100% {
+    background-position: 400% 0;
   }
 }

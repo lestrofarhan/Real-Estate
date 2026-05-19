@@ -72,7 +72,7 @@ function ProfileUpdatePage() {
         />
         <UploadWidget
           uwConfig={{
-            cloudName: "lamadev",
+            cloudName: "lestrodev",
             uploadPreset: "estate",
             multiple: false,
             maxImageFileSize: 2000000,

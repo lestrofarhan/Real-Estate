@@ -35,9 +35,12 @@ io.on("connection", (socket) => {
 
     socket.on("sendMessage", ({ recieverId, data }) => {
         const user = getUser(recieverId);
+        if (!user) {
+            return
+        }
+        console.log(user);
         io.to(user.socketId).emit("getMessage", data);
     })
-
 
     socket.on("disconnect", () => {
         removeUser(socket.id);

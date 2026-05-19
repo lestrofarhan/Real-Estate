@@ -41,6 +41,14 @@ export const addChat = async (req, res) => {
     }
 
     try {
+
+        const chat = await prisma.chat.findFirst({
+            where: { userIDs: { hasEvery: [tokenUserId, receiverId] } },
+        });
+
+        if (chat) {
+            return res.status(200).json(chat);
+        }
         const newChat = await prisma.chat.create({
             data: {
                 userIDs: [tokenUserId,receiverId],
@@ -61,6 +69,8 @@ export const getChat = async (req, res) => {
         const chat = await prisma.chat.findUnique({
             where: { id: chatId, userIDs: { hasSome: [userID] } },
             select: {
+                seenBy: true,
+                id: true,
                 messages: {
                     orderBy: { createdAt: "asc" },
                 }

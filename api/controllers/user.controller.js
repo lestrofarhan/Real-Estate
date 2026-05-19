@@ -202,6 +202,7 @@ export const getNotificationNumber = async (req, res) => {
             }
         })
 
+
         res.status(200).json({ number });
 
     } catch (error) {

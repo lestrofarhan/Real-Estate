@@ -7,6 +7,7 @@ import testRoute from "./routes/test.route.js";
 import userRoute from "./routes/user.route.js";
 import chatRoute from "./routes/chat.route.js";
 import messageRoute from "./routes/message.route.js";
+import contactRoute from "./routes/contact.route.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use("/api/posts", postRoute);
 app.use("/api/test", testRoute);
 app.use("/api/chats", chatRoute);
 app.use("/api/messages", messageRoute);
+app.use("/api/contact", contactRoute);
 
 app.get("/test", (req, res) => {
     res.send("everything is ok");

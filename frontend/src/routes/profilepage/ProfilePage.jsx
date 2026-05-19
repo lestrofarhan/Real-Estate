@@ -3,13 +3,56 @@ import List from "../../components/list/List";
 import "./profilePage.scss";
 import apiRequest from "../../lib/apiRequest";
 import { Await, Link, useLoaderData, useNavigate } from "react-router-dom";
-import { Suspense, useContext } from "react";
+import { Suspense, useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 function ProfilePage() {
   const data = useLoaderData();
-console.log(data);
+  console.log(data);
   const { updateUser, currentUser } = useContext(AuthContext);
+  const [focused, setFocused] = useState(null);
+
+  const SkeletonInfo = () => (
+    <div className="skeleton info-skeleton">
+      <div className="avatar" />
+      <div className="lines">
+        <div className="line short" />
+        <div className="line long" />
+        <div className="line medium" />
+      </div>
+    </div>
+  );
+
+  const SkeletonList = ({ count = 4 }) => (
+    <div className="skeleton list-skeleton">
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className={`skeleton-card ${focused === i ? "focused" : ""}`}
+          onClick={() => setFocused(focused === i ? null : i)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setFocused(focused === i ? null : i);
+          }}
+        >
+          <div className="thumb" />
+          <div className="lines">
+            <div className="line short" />
+            <div className="line long" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const SkeletonChat = () => (
+    <div className="skeleton chat-skeleton">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="chat-line" />
+      ))}
+    </div>
+  );
 
   const navigate = useNavigate();
 
@@ -51,7 +94,7 @@ console.log(data);
               <button>Create New Post</button>
             </Link>
           </div>
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<SkeletonList />}>
             <Await
               resolve={data.postResponse}
               errorElement={<p>Error loading posts!</p>}
@@ -62,7 +105,7 @@ console.log(data);
           <div className="title">
             <h1>Saved List</h1>
           </div>
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<SkeletonList />}>
             <Await
               resolve={data.postResponse}
               errorElement={<p>Error loading posts!</p>}
@@ -74,7 +117,7 @@ console.log(data);
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<SkeletonChat />}>
             <Await
               resolve={data.chatResponse}
               errorElement={<p>Error loading chats!</p>}

@@ -6,12 +6,12 @@ export const singlePageLoader = async ({ params }) => {
     try {
         const res = await apiRequest(`/posts/${params.id}`);
         return { property: res.data };
-    } catch (error) {   
+    } catch (error) {
         console.log(error)
-    }   
+    }
 }
 
-export const listPageLoader = async ({request, params}) => { 
+export const listPageLoader = async ({ request, params }) => {
     try {
         const query = request.url.split("?")[1];
         const postPromise = apiRequest("/posts?" + query);

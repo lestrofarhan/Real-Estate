@@ -9,11 +9,14 @@ import { useNotificationStore } from "../../lib/notificationStore";
 function Chat({ chats }) {
   const [chat, setChat] = useState(null);
   const { currentUser } = useContext(AuthContext);
-  const { socket } = useContext(socketContext);
+  const { socket, setActiveChatId } = useContext(socketContext);
 
   const messageEndRef = useRef();
 
+  const fetch = useNotificationStore((state) => state.fetch);
   const decrease = useNotificationStore((state) => state.decrease);
+  const increase = useNotificationStore((state) => state.increase);
+  const number = useNotificationStore((state) => state.number);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -41,9 +44,10 @@ function Chat({ chats }) {
     try {
       const res = await apiRequest.post("/messages/" + chat.id, { text });
       setChat((prev) => ({ ...prev, messages: [...prev.messages, res.data] }));
+      setActiveChatId(chat.id); // Set active chat ID in context when sending a message
       e.target.reset();
       socket.emit("sendMessage", {
-        receiverId: chat.receiver.id,
+        recieverId: chat.receiver.id,
         data: res.data,
       });
     } catch (err) {
@@ -61,15 +65,29 @@ function Chat({ chats }) {
     };
 
     if (chat && socket) {
-      socket.on("getMessage", (data) => {
-        if (chat.id === data.chatId) {
-          setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
-          read();
-        }
-      });
+      read();
     }
+
+    if (!socket) return;
+
+    const handleMessage = (data) => {
+      console.log("got a message")
+      if (chat && chat.id === data.chatId) {
+        setChat((prev) => ({ ...prev, messages: [...prev.messages, data] }));
+        read()
+        decrease()
+        console.log(number)
+        return;
+      }
+
+      if (data.userId !== currentUser.id) {
+        fetch();
+      }
+    };
+
+    socket.on("getMessage", handleMessage);
     return () => {
-      socket.off("getMessage");
+      socket.off("getMessage", handleMessage);
     };
   }, [socket, chat]);
 
@@ -77,23 +95,27 @@ function Chat({ chats }) {
     <div className="chat">
       <div className="messages">
         <h1>Messages</h1>
-        {chat ? chats?.map((c) => (
-          <div
-            className="message"
-            key={c.id}
-            style={{
-              backgroundColor:
-                c.seenBy.includes(currentUser.id) || chat?.id === c.id
-                  ? "white"
-                  : "#fecd514e",
-            }}
-            onClick={() => handleOpenChat(c.id, c.receiver)}
-          >
-            <img src={c.receiver.avatar || "/noavatar.jpg"} alt="" />
-            <span>{c.receiver.username}</span>
-            <p>{c.lastMessage}</p>
-          </div>
-        )) : <span className="noConv">Open a conversation to start a chat</span>}
+        {chats ? (
+          chats?.map((c) => (
+            <div
+              className="message"
+              key={c.id}
+              style={{
+                backgroundColor:
+                  c.seenBy.includes(currentUser.id) || chat?.id === c.id
+                    ? "white"
+                    : "#fecd514e",
+              }}
+              onClick={() => handleOpenChat(c.id, c.reciever)}
+            >
+              <img src={c.reciever?.avatar || "/noavatar.jpg"} alt="" />
+              <span>{c.reciever.username}</span>
+              <p>{c.lastMessage}</p>
+            </div>
+          ))
+        ) : (
+          <span className="noConv">Open a conversation to start a chat</span>
+        )}
       </div>
       {chat && (
         <div className="chatBox">

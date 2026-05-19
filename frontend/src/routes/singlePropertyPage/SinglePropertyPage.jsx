@@ -6,11 +6,15 @@ import DOMPurify from "dompurify";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
+import Modal from "../../components/modal/Modal";
 
 function SinglePropertyPage() {
   const postData = useLoaderData();
-  const post = postData.property;
   
+  const post = postData.property;
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
+
   const [saved, setSaved] = useState(post.isSaved);
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -19,7 +23,7 @@ function SinglePropertyPage() {
     if (!currentUser) {
       navigate("/login");
     }
-    // AFTER REACT 19 UPDATE TO USEOPTIMISTIK HOOK
+
     setSaved((prev) => !prev);
     try {
       await apiRequest.post("/users/save", { postId: post.id });
@@ -29,12 +33,16 @@ function SinglePropertyPage() {
     }
   };
 
-  const sendMessageHandler = () => {
-    return "sfa"
-  }
+  console.log(postData.property.userId);
 
   return (
     <div className="singlePage">
+      {modalIsOpen && (
+        <Modal
+          recieverId={postData.property.userId}
+          onClose={() => setModalIsOpen(false)}
+        />
+      )}
       <div className="details">
         <div className="wrapper">
           <Slider images={post.images} />
@@ -145,7 +153,15 @@ function SinglePropertyPage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button onClick={sendMessageHandler} >
+            <button
+              onClick={() => {
+                if (!currentUser) {
+                  navigate("/login");
+                  return;
+                }
+                setModalIsOpen(true);
+              }}
+            >
               <img src="/chat.png" alt="" />
               Send a Message
             </button>

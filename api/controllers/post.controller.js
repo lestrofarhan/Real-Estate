@@ -23,7 +23,7 @@ export const getPosts = async (req, res) => {
 
         res.status(200).json(posts);
 
-    }catch (error) {
+    } catch (error) {
         console.log(err);
         res.status(500).json({ message: "Failed to get posts" });
     }
@@ -33,7 +33,7 @@ export const getPosts = async (req, res) => {
 export const getPost = async (req, res) => {
 
     const { id } = req.params;
-    
+
     try {
         const post = await prisma.post.findUnique({
             where: { id },
@@ -60,7 +60,7 @@ export const getPost = async (req, res) => {
     }
 
 }
-              
+
 
 
 export const addPost = async (req, res) => {
@@ -82,7 +82,7 @@ export const addPost = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Failed to add post" });
-   }
+    }
 
 }
 
@@ -95,7 +95,7 @@ export const updatePost = async (req, res) => {
     try {
         const post = await prisma.post.findUnique({
             where: { id: postID },
-        }); 
+        });
 
         if (!post) {
             return res.status(404).json({ message: "Post not found" });
@@ -106,7 +106,7 @@ export const updatePost = async (req, res) => {
         }
         await prisma.post.update({
             where: { id: postID },
-            data: { 
+            data: {
                 ...body.postData,
                 postDetail: {
                     update: body.postDetail
@@ -138,7 +138,7 @@ export const deletePost = async (req, res) => {
         if (post.userId !== userID) {
             return res.status(403).json({ message: "Not Authorized!" });
         }
-   
+
         // the YT didn't mention this but we also need to delete the post details and any saved entries for this post to avoid orphaned records and maintain data integrity. We can do this in a transaction to ensure all related deletions succeed or fail together.
 
         await prisma.$transaction([
@@ -156,7 +156,7 @@ export const deletePost = async (req, res) => {
                 where: { id: postID },
             }),
         ]);
-        
+
 
         res.status(200).json({ message: "Post deleted successfully" });
     } catch (error) {
